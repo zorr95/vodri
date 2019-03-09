@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,10 +18,10 @@ import ShipCollisionDetector.Models.Enums.LengthUnit;
 import ShipCollisionDetector.Models.Enums.MassUnit;
 import ShipCollisionDetector.Models.Enums.SpeedUnit;
 import ShipCollisionDetector.Service.Impl.ShipInteractCalculator;
-import junit.framework.TestCase;
 
-public class ShipInteractCalculatorTests extends TestCase {
+public class ShipInteractCalculatorTests {
 
+	private static double EPSYLON = 0.0001;
 	private ShipInteractCalculator shipInteractCalculator;
 	
 	public static Collection<Object[]> validDataSource() {
@@ -37,8 +38,8 @@ public class ShipInteractCalculatorTests extends TestCase {
 						),
 				270,
 				new Position(
-						new Length(LengthUnit.KM, 1169.345105),
-						new Length(LengthUnit.KM, 0)
+						new Length(LengthUnit.KM, 0),
+						new Length(LengthUnit.KM, 1169.345105)
 						)
 			} 
 		});
@@ -58,9 +59,9 @@ public class ShipInteractCalculatorTests extends TestCase {
 		Position calculatedPosition = shipInteractCalculator.getRoutesInteractPosition(interactShip, interactShipPosition, interactShipDirection);
 		
 		//Assert
-		 assertThat(calculatedPosition.getX().getLengthValue(), is(expectedPosition.getX().getLengthValue()));
-		 assertThat(calculatedPosition.getX().getLengthUnit(), is(expectedPosition.getX().getLengthUnit()));
-		 assertThat(calculatedPosition.getY().getLengthValue(), is(expectedPosition.getY().getLengthValue()));
-		 assertThat(calculatedPosition.getY().getLengthUnit(), is(expectedPosition.getY().getLengthUnit()));
+		assertEquals(calculatedPosition.getX().getLengthValue(), expectedPosition.getX().getLengthValue(), EPSYLON);
+		assertThat(calculatedPosition.getX().getLengthUnit(), is(expectedPosition.getX().getLengthUnit()));
+		assertEquals(calculatedPosition.getY().getLengthValue(), expectedPosition.getY().getLengthValue(), EPSYLON);
+		assertThat(calculatedPosition.getY().getLengthUnit(), is(expectedPosition.getY().getLengthUnit()));
 	}
 }
