@@ -7,6 +7,13 @@ import ShipCollisionDetector.Service.IShipInteractCalculator;
 
 public class ShipInteractCalculator implements IShipInteractCalculator {
 	
+	private static double TIMEDELAYCONSTANS = 3.5;
+	private IIntervall myIntervall;
+	
+	public ShipInteractCalculator(IIntervall mockIntervall) {
+		this.myIntervall = mockIntervall;
+	}
+	
 	public Position getRoutesInteractPosition(Ship interactShip, Position interactShipPosition, double interactShipDirection) {
 		double speedX = interactShip.getSpeed().getSpeedValue() * Math.cos(90-interactShipDirection); 
 		double speedY = interactShip.getSpeed().getSpeedValue() * Math.sin(90-interactShipDirection); 
@@ -29,7 +36,18 @@ public class ShipInteractCalculator implements IShipInteractCalculator {
 	}
 	
 	public Boolean doShipsCollide(Ship firstShip, Time firstShipTimeToReachPosition, Ship secondShip, Time secondShiptimeToReachPosition) {
-		return null;
+		double firstShipTimeDelay =  TIMEDELAYCONSTANS * firstShip.getLength().getLengthValue() / firstShip.getSpeed().getSpeedValue();
+		double secondShipTimeDelay = TIMEDELAYCONSTANS * secondShip.getLength().getLengthValue() / secondShip.getSpeed().getSpeedValue();
+		
+		this.myIntervall.setLeftSide(firstShipTimeToReachPosition.getTimeValue()-firstShipTimeDelay);
+		this.myIntervall.setRightSide(firstShipTimeToReachPosition.getTimeValue() + firstShipTimeDelay);
+		
+		return myIntervall.isCollapsed(
+					new Intervall(
+							secondShiptimeToReachPosition.getTimeValue() - secondShipTimeDelay, 
+							secondShiptimeToReachPosition.getTimeValue() + secondShipTimeDelay
+							)
+				);
 	}
 	
 	public String getWarningMessage(Ship otherShip, double otherShipDirection) {

@@ -9,6 +9,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mockito;
+import org.mockito.Matchers.*;
+
+import ShipCollisionDetector.Models.IIntervall;
+import ShipCollisionDetector.Models.Intervall;
 import ShipCollisionDetector.Models.Length;
 import ShipCollisionDetector.Models.Mass;
 import ShipCollisionDetector.Models.Position;
@@ -98,13 +103,13 @@ public class ShipInteractCalculatorTests {
 							new Speed(SpeedUnit.KMH, 30)
 							),
 					new Time(TimeUnit.H, 38.97817017),
-					false
+					true
 					}});
 	}
 
 	@BeforeEach
 	void before() {
-		this.shipInteractCalculator = new ShipInteractCalculator();
+		this.shipInteractCalculator = new ShipInteractCalculator(new Intervall());
 	}
 
 	@ParameterizedTest
@@ -135,14 +140,18 @@ public class ShipInteractCalculatorTests {
 		assertThat(calculatedTime.getTimeUnit(), is(expectedTime.getTimeUnit()));
 	}
 	
-
 	@ParameterizedTest
 	@MethodSource("validDataSourceForDoShipsCollide")
 	void testDoShipsCollide(Ship firstShip, Time firstShipTimeToReachPosition, Ship secondShip, Time secondShiptimeToReachPosition, Boolean expectedAnswer) {
 		// Arrange
+		IIntervall mockIntervall = Mockito.mock(IIntervall.class);
+		Mockito.when(mockIntervall.isCollapsed(org.mockito.Matchers.any(Intervall.class))) // when argument equals TESTDATA
+		.thenReturn(expectedAnswer); // then throw an exception
 
+		ShipInteractCalculator newCalculator = new ShipInteractCalculator(mockIntervall);
+		
 		// Act
-		Boolean calculatedAnswer = shipInteractCalculator.doShipsCollide(firstShip, firstShipTimeToReachPosition, secondShip, secondShiptimeToReachPosition);
+		Boolean calculatedAnswer = newCalculator.doShipsCollide(firstShip, firstShipTimeToReachPosition, secondShip, secondShiptimeToReachPosition);
 
 		// Assert
 		assertThat(calculatedAnswer, is(expectedAnswer));
