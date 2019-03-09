@@ -8,6 +8,9 @@ import ShipCollisionDetector.Service.IShipInteractCalculator;
 public class ShipInteractCalculator implements IShipInteractCalculator {
 	
 	private static double TIMEDELAYCONSTANS = 3.5;
+	private static String SLOWDOWNMESSAGE = "Mi lassítsunk, a másik hajó mehet!";
+	private static String BEAWAREMESSAGE = "Mi mehetünk, de figyeljünk a másik hajóra!";
+	
 	private IIntervall myIntervall;
 	
 	public ShipInteractCalculator(IIntervall mockIntervall) {
@@ -51,6 +54,27 @@ public class ShipInteractCalculator implements IShipInteractCalculator {
 	}
 	
 	public String getWarningMessage(Ship firstShip, Position firstShipPosition, double firstShipDirection, Ship secondShip, Position secondShipPosition, double secondShipDirection) {
+		if(firstShipDirection == 0.0 && firstShipPosition.getX().getLengthValue() == 0.0 && firstShipPosition.getY().getLengthValue() == 0.0) {
+			return getMessageByShips(firstShip, secondShip, secondShipPosition, secondShipDirection);
+		} else if(secondShipDirection == 0.0 && secondShipPosition.getX().getLengthValue() == 0.0 && secondShipPosition.getY().getLengthValue() == 0.0) {
+			return getMessageByShips(secondShip, firstShip, firstShipPosition, firstShipDirection);
+		}
 		return null;
+	}
+
+	private String getMessageByShips(Ship myShip, Ship otherShip, Position otherShipPosition, double otherShipDirection) {
+		if((otherShipDirection >= 270 && otherShipDirection <= 360) || (otherShipDirection >= 0 && otherShipDirection <= 90)) {
+			if(otherShipPosition.getX().getLengthValue() >= 0) {
+				return SLOWDOWNMESSAGE;
+			} else {
+				return BEAWAREMESSAGE;
+			}
+		} else {
+			if(myShip.getMass().getMassValue() >= otherShip.getMass().getMassValue()) {
+				return SLOWDOWNMESSAGE;
+			} else {
+				return BEAWAREMESSAGE;
+			}
+		}
 	}
 }

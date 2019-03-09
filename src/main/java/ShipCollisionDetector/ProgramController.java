@@ -11,7 +11,7 @@ public class ProgramController {
 	private double myDirection;
 	
 	public ProgramController(Ship ship, Position position, double direction) {
-		this.shipInteractCalculator = new ShipInteractCalculator();
+		this.shipInteractCalculator = new ShipInteractCalculator(new Intervall());
 		this.myShip = ship;
 		this.myPosition = position; 
 		this.myDirection = direction;
@@ -47,6 +47,6 @@ public class ProgramController {
 		Time myTimeToReachCollapsePosition = shipInteractCalculator.getTimeOfReachPosition(myShip, myPosition, myDirection, collapsePosition);
 		Time otherShipsTimeToReachCollapsePosition = shipInteractCalculator.getTimeOfReachPosition(otherShip, otherPosition, otherDirection, collapsePosition);
 		shipInteractCalculator.doShipsCollide(myShip, myTimeToReachCollapsePosition, otherShip, otherShipsTimeToReachCollapsePosition);
-		return shipInteractCalculator.getWarningMessage(otherShip, otherDirection);
+		return shipInteractCalculator.getWarningMessage(otherShip, otherPosition, otherDirection, myShip, myPosition, myDirection);
 	}
 }

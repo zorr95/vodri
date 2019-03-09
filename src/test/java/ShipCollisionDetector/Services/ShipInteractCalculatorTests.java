@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
-import org.mockito.Matchers.*;
 
 import ShipCollisionDetector.Models.IIntervall;
 import ShipCollisionDetector.Models.Intervall;
@@ -200,6 +199,29 @@ public class ShipInteractCalculatorTests {
 							), 
 					0,
 					"Mi lassítsunk, a másik hajó mehet!"
+				},
+				{ 
+					new Ship(
+							new Mass(MassUnit.KG, 2000), 
+							new Length(LengthUnit.KM, 200), 
+							new Speed(SpeedUnit.KMH, 30)
+							),
+					new Position(
+							new Length(LengthUnit.KM, 500), 
+							new Length(LengthUnit.KM, 500)
+							), 
+					269,
+					new Ship(
+							new Mass(MassUnit.KG, 20000), 
+							new Length(LengthUnit.KM, 200), 
+							new Speed(SpeedUnit.KMH, 30)
+							),
+					new Position(
+							new Length(LengthUnit.KM, 10), 
+							new Length(LengthUnit.KM, 0)
+							), 
+					0,
+					null
 				}
 			});
 	}
