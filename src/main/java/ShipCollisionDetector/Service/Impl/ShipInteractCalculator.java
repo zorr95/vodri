@@ -1,10 +1,11 @@
-package ShipCollisionDetector.Service;
+package ShipCollisionDetector.Service.Impl;
 
 import ShipCollisionDetector.Models.*;
+import ShipCollisionDetector.Service.IShipInteractCalculator;
 
-public class ShipInteractCalculator {
-
-	public Position getRoutesInteractPosition(Ship interactShip) {
+public class ShipInteractCalculator implements IShipInteractCalculator {
+	
+	public Position getRoutesInteractPosition(Ship interactShip, Position interactShipPosition, double interactShipDirection) {
 		return null;
 	}
 	
