@@ -9,6 +9,12 @@ public class Mass implements Comparable<Mass> {
 	private MassUnit massUnit;
 	private double massValue;
 	
+	public Mass(MassUnit massUnit, double massValue) {
+		//TODO: convert given unit into KG
+		this.massUnit = massUnit;
+		this.massValue = massValue;
+	}
+	
 	public MassUnit getMassUnit() {
 		return massUnit;
 	}

@@ -43,7 +43,7 @@ public class ProgramController {
 
 	public String getWarningMessageForCollapsion(Ship otherShip, Position otherPosition, double otherDirection) {
 		myShip.isOtherShipIntersectMyRoute(otherPosition, otherDirection);
-		Position collapsePosition = shipInteractCalculator.getRoutesInteractPosition(otherShip);
+		Position collapsePosition = shipInteractCalculator.getRoutesInteractPosition(otherShip, otherPosition, otherDirection);
 		Time myTimeToReachCollapsePosition = shipInteractCalculator.getTimeOfReachPosition(myShip, myPosition);
 		Time otherShipsTimeToReachCollapsePosition = shipInteractCalculator.getTimeOfReachPosition(otherShip, otherPosition);
 		shipInteractCalculator.doShipsCollide(myTimeToReachCollapsePosition, otherShipsTimeToReachCollapsePosition);
