@@ -106,6 +106,103 @@ public class ShipInteractCalculatorTests {
 					true
 					}});
 	}
+	
+	public static Collection<Object[]> validDataSourceForGetWarningMessage() {
+		return Arrays.asList(new Object[][] {
+				{ 
+					new Ship(
+							new Mass(MassUnit.KG, 2000), 
+							new Length(LengthUnit.KM, 200), 
+							new Speed(SpeedUnit.KMH, 30)
+							),
+					new Position(
+							new Length(LengthUnit.KM, 0), 
+							new Length(LengthUnit.KM, 0)
+							), 
+					0,
+					new Ship(
+							new Mass(MassUnit.KG, 2000), 
+							new Length(LengthUnit.KM, 200), 
+							new Speed(SpeedUnit.KMH, 30)
+							),
+					new Position(
+							new Length(LengthUnit.KM, 500), 
+							new Length(LengthUnit.KM, 500)
+							), 
+					270,
+					"Mi lassítsunk, a másik hajó mehet!"
+				},
+				{ 
+					new Ship(
+							new Mass(MassUnit.KG, 2000), 
+							new Length(LengthUnit.KM, 200), 
+							new Speed(SpeedUnit.KMH, 30)
+							),
+					new Position(
+							new Length(LengthUnit.KM, 0), 
+							new Length(LengthUnit.KM, 0)
+							), 
+					0,
+					new Ship(
+							new Mass(MassUnit.KG, 2000), 
+							new Length(LengthUnit.KM, 200), 
+							new Speed(SpeedUnit.KMH, 30)
+							),
+					new Position(
+							new Length(LengthUnit.KM, -500), 
+							new Length(LengthUnit.KM, 500)
+							), 
+					270,
+					"Mi mehetünk, de figyeljünk a másik hajóra!"
+				},
+				{ 
+					new Ship(
+							new Mass(MassUnit.KG, 2000), 
+							new Length(LengthUnit.KM, 200), 
+							new Speed(SpeedUnit.KMH, 30)
+							),
+					new Position(
+							new Length(LengthUnit.KM, 0), 
+							new Length(LengthUnit.KM, 0)
+							), 
+					0,
+					new Ship(
+							new Mass(MassUnit.KG, 20000), 
+							new Length(LengthUnit.KM, 200), 
+							new Speed(SpeedUnit.KMH, 30)
+							),
+					new Position(
+							new Length(LengthUnit.KM, 500), 
+							new Length(LengthUnit.KM, 500)
+							), 
+					91,
+					"Mi mehetünk, de figyeljünk a másik hajóra!"
+				},
+				{ 
+					new Ship(
+							new Mass(MassUnit.KG, 2000), 
+							new Length(LengthUnit.KM, 200), 
+							new Speed(SpeedUnit.KMH, 30)
+							),
+					new Position(
+							new Length(LengthUnit.KM, 500), 
+							new Length(LengthUnit.KM, 500)
+							), 
+					269,
+					new Ship(
+							new Mass(MassUnit.KG, 20000), 
+							new Length(LengthUnit.KM, 200), 
+							new Speed(SpeedUnit.KMH, 30)
+							),
+					new Position(
+							new Length(LengthUnit.KM, 0), 
+							new Length(LengthUnit.KM, 0)
+							), 
+					0,
+					"Mi lassítsunk, a másik hajó mehet!"
+				}
+			});
+	}
 
 	@BeforeEach
 	void before() {
@@ -155,5 +252,17 @@ public class ShipInteractCalculatorTests {
 
 		// Assert
 		assertThat(calculatedAnswer, is(expectedAnswer));
+	}
+	
+	@ParameterizedTest
+	@MethodSource("validDataSourceForGetWarningMessage")
+	void testGetWarningMessage(Ship firstShip, Position firstShipPosition, double firstShipDirection, Ship secondShip, Position secondShipPosition, double secondShipDirection, String expectedMessage) {
+		// Arrange
+
+		// Act
+		String calculatedMessage = shipInteractCalculator.getWarningMessage(firstShip, firstShipPosition, firstShipDirection, secondShip, secondShipPosition, secondShipDirection);
+
+		// Assert
+		assertThat(calculatedMessage, is(expectedMessage));
 	}
 }

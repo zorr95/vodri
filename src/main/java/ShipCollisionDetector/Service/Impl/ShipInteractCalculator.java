@@ -50,7 +50,7 @@ public class ShipInteractCalculator implements IShipInteractCalculator {
 				);
 	}
 	
-	public String getWarningMessage(Ship otherShip, double otherShipDirection) {
+	public String getWarningMessage(Ship firstShip, Position firstShipPosition, double firstShipDirection, Ship secondShip, Position secondShipPosition, double secondShipDirection) {
 		return null;
 	}
 }
