@@ -2,6 +2,7 @@ package ShipCollisionDetector.Service.Impl;
 
 import ShipCollisionDetector.Models.*;
 import ShipCollisionDetector.Models.Enums.LengthUnit;
+import ShipCollisionDetector.Models.Enums.TimeUnit;
 import ShipCollisionDetector.Service.IShipInteractCalculator;
 
 public class ShipInteractCalculator implements IShipInteractCalculator {
@@ -16,11 +17,18 @@ public class ShipInteractCalculator implements IShipInteractCalculator {
 		return calculatedPosition;
 	}
 	
-	public Time getTimeOfReachPosition(Ship ship, Position position) {
-		return null;
+	public Time getTimeOfReachPosition(Ship ship, Position shipPosition, double shipDirection, Position reachablePosition) {
+		if(shipPosition.getX().getLengthValue() == 0.0 && shipPosition.getY().getLengthValue() == 0.0) {
+			double time = reachablePosition.getY().getLengthValue() / ship.getSpeed().getSpeedValue();
+			return new Time(TimeUnit.H, time);
+		} else {
+			double speedX = ship.getSpeed().getSpeedValue() * Math.cos(90-shipDirection); 
+			double time = - (shipPosition.getX().getLengthValue()/speedX);
+			return new Time(TimeUnit.H, time);
+		}
 	}
 	
-	public Boolean doShipsCollide(Time firstShip, Time secondShip) {
+	public Boolean doShipsCollide(Ship firstShip, Time firstShipTimeToReachPosition, Ship secondShip, Time secondShiptimeToReachPosition) {
 		return null;
 	}
 	

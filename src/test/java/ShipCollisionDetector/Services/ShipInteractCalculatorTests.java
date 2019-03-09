@@ -57,6 +57,11 @@ public class ShipInteractCalculatorTests {
 							new Length(LengthUnit.KM, 500), 
 							new Length(LengthUnit.KM, 500)
 							), 
+					270,
+					new Position(
+							new Length(LengthUnit.KM, 0),
+							new Length(LengthUnit.KM, 1169.345105)
+							),					
 					new Time(TimeUnit.H, 27.84925433)
 				},
 				{ 
@@ -69,9 +74,32 @@ public class ShipInteractCalculatorTests {
 							new Length(LengthUnit.KM, 0), 
 							new Length(LengthUnit.KM, 0)
 							), 
+					0,
+					new Position(
+							new Length(LengthUnit.KM, 0),
+							new Length(LengthUnit.KM, 1169.345105)
+							),
 					new Time(TimeUnit.H, 38.97817017)
 				}
 			});
+	}
+	
+	public static Collection<Object[]> validDataSourceForDoShipsCollide() {
+		return Arrays.asList(new Object[][] {{ 
+					new Ship(
+							new Mass(MassUnit.KG, 2000), 
+							new Length(LengthUnit.KM, 200), 
+							new Speed(SpeedUnit.KMH, 30)
+							),
+					new Time(TimeUnit.H, 27.84925433),
+					new Ship(
+							new Mass(MassUnit.KG, 2000), 
+							new Length(LengthUnit.KM, 200), 
+							new Speed(SpeedUnit.KMH, 30)
+							),
+					new Time(TimeUnit.H, 38.97817017),
+					false
+					}});
 	}
 
 	@BeforeEach
@@ -96,14 +124,27 @@ public class ShipInteractCalculatorTests {
 
 	@ParameterizedTest
 	@MethodSource("validDataSourceForGetTimeOfReachPosition")
-	void testGetTimeOfReachPosition(Ship interactShip, Position interactShipPosition, Time expectedTime) {
+	void testGetTimeOfReachPosition(Ship interactShip, Position interactShipPosition, double interactShipDirection, Position reachablePosition, Time expectedTime) {
 		// Arrange
 
 		// Act
-		Time calculatedTime = shipInteractCalculator.getTimeOfReachPosition(interactShip, interactShipPosition);
+		Time calculatedTime = shipInteractCalculator.getTimeOfReachPosition(interactShip, interactShipPosition, interactShipDirection, reachablePosition);
 
 		// Assert
 		assertEquals(calculatedTime.getTimeValue(), expectedTime.getTimeValue(), EPSYLON);
 		assertThat(calculatedTime.getTimeUnit(), is(expectedTime.getTimeUnit()));
+	}
+	
+
+	@ParameterizedTest
+	@MethodSource("validDataSourceForDoShipsCollide")
+	void testDoShipsCollide(Ship firstShip, Time firstShipTimeToReachPosition, Ship secondShip, Time secondShiptimeToReachPosition, Boolean expectedAnswer) {
+		// Arrange
+
+		// Act
+		Boolean calculatedAnswer = shipInteractCalculator.doShipsCollide(firstShip, firstShipTimeToReachPosition, secondShip, secondShiptimeToReachPosition);
+
+		// Assert
+		assertThat(calculatedAnswer, is(expectedAnswer));
 	}
 }
