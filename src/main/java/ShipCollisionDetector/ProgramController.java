@@ -1,17 +1,17 @@
 package ShipCollisionDetector;
 
 import ShipCollisionDetector.Models.*;
-import ShipCollisionDetector.Service.Impl.ShipInteractCalculator;
+import ShipCollisionDetector.Service.IShipInteractCalculator;
 
 public class ProgramController {
 
-	private static ShipInteractCalculator shipInteractCalculator;
+	private static IShipInteractCalculator shipInteractCalculator;
 	private Ship myShip;
 	private Position myPosition;
 	private double myDirection;
 	
-	public ProgramController(Ship ship, Position position, double direction) {
-		this.shipInteractCalculator = new ShipInteractCalculator(new Intervall());
+	public ProgramController(Ship ship, Position position, double direction, IShipInteractCalculator calculator) {
+		this.shipInteractCalculator = calculator;
 		this.myShip = ship;
 		this.myPosition = position; 
 		this.myDirection = direction;
