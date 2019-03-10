@@ -1,5 +1,5 @@
 package ShipCollisionDetector.Models.Enums;
 
-public enum MassUnit {
-	G,KG,T,OZ,LB
+public enum TimeUnit {
+	S, M, H
 }

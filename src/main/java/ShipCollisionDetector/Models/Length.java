@@ -7,6 +7,11 @@ public class Length implements Comparable<Length> {
 	private LengthUnit lengthUnit;
 	private double lengthValue;
 	
+	public Length(LengthUnit lengthUnit, double lengthValue) {
+		this.lengthUnit = lengthUnit;
+		this.lengthValue = lengthValue;
+	}
+	
 	public LengthUnit getLengthUnit() {
 		return lengthUnit;
 	}
