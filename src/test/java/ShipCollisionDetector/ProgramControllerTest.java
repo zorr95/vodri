@@ -7,8 +7,6 @@ import static org.mockito.Mockito.verify;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
@@ -51,7 +49,7 @@ public class ProgramControllerTest {
 				null
 			},
 			{ 
-				false, 
+				true, 
 				new Ship(
 						new Mass(MassUnit.KG, 2000), 
 						new Length(LengthUnit.KM, 200), 
@@ -72,7 +70,7 @@ public class ProgramControllerTest {
 				SLOWDOWNMESSAGE
 			},
 			{ 
-				false, 
+				true, 
 				new Ship(
 						new Mass(MassUnit.KG, 2000), 
 						new Length(LengthUnit.KM, 200), 
@@ -93,7 +91,7 @@ public class ProgramControllerTest {
 				BEAWAREMESSAGE
 			},
 			{ 
-				false, 
+				true, 
 				new Ship(
 						new Mass(MassUnit.KG, 2000), 
 						new Length(LengthUnit.KM, 200), 
@@ -116,19 +114,15 @@ public class ProgramControllerTest {
 		});
 	}
 	
-	@BeforeEach
-	void before() {
-		this.mockCalculator = Mockito.mock(IShipInteractCalculator.class);
-		this.mockShip = Mockito.mock(Ship.class);
-		this.mockShipPosition = new Position(new Length(LengthUnit.KM,0),new Length(LengthUnit.KM,0));
-		
-		this.programController = new ProgramController(mockShip, mockShipPosition, 0, mockCalculator);
-	}
-	
 	@ParameterizedTest
 	@MethodSource("validDataSourceForGetWarningMessageForCollapsion")
 	public void testGetWarningMessageForCollapsion(Boolean isIntersect, Ship otherShip, Position otherPosition, double otherDirection, Position mockPosition, Time firstMockTime, Time secondMockTime, Boolean isCollide, String expectedMessage) {
 		//Arrange
+
+		this.mockCalculator = Mockito.mock(IShipInteractCalculator.class);
+		this.mockShip = Mockito.mock(Ship.class);
+		this.mockShipPosition = new Position(new Length(LengthUnit.KM,0),new Length(LengthUnit.KM,0));
+		
 		Mockito.when(this.mockShip.isOtherShipIntersectMyRoute(org.mockito.Matchers.any(Position.class), org.mockito.Matchers.anyDouble()))
 			.thenReturn(isIntersect);
 		Mockito.when(mockCalculator.getRoutesInteractPosition(otherShip, otherPosition, otherDirection))
@@ -139,8 +133,10 @@ public class ProgramControllerTest {
 		.thenReturn(secondMockTime);
 		Mockito.when(mockCalculator.doShipsCollide(mockShip, firstMockTime, otherShip, secondMockTime))
 			.thenReturn(isCollide);
-		Mockito.when(mockCalculator.getWarningMessage(mockShip, mockShipPosition, 0, otherShip, otherPosition, otherDirection))
+		Mockito.when(mockCalculator.getWarningMessage(otherShip, otherPosition, otherDirection, mockShip, mockShipPosition, 0))
 			.thenReturn(expectedMessage);
+
+		this.programController = new ProgramController(mockShip, mockShipPosition, 0, mockCalculator);
 		
 		//Act
 		String calculatedMessage = programController.getWarningMessageForCollapsion(otherShip, otherPosition, otherDirection);
